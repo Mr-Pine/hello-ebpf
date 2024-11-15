@@ -600,6 +600,7 @@ public class CompilerPlugin implements Plugin {
         if (!missingKernelFeatures.isEmpty()) {
             logWarning(programPath, bpfProgram, "Can't compile, missing kernel features in the current kernel: "
                     + String.join(", ", missingKernelFeatures));
+            logger.printRawLines("Missing features: " + missingKernelFeatures);
             return;
         }
 
