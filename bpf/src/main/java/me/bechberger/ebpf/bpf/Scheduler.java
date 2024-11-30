@@ -123,8 +123,10 @@ import static me.bechberger.ebpf.bpf.raw.Lib_2.bpf_map__attach_struct_ops;
                 	       .dispatch		= (void *)sched_dispatch,
                 	       .update_idle		= (void *)sched_update_idle,
                 	       .init_task		= (void *)sched_init_task,
+                	       .exit_task		= (void *)sched_exit_task,
                 	       .init			= (void *)sched_init,
                 	       .exit			= (void *)sched_exit,
+                	       .yield			= (void *)sched_yield,
                 	       .running	        = (void *)simple_running,
                 	       .enable          = (void *)simple_enable,
                 	       .stopping        = (void *)simple_stopping,
@@ -253,6 +255,14 @@ public interface Scheduler {
     }
 
     @BPFFunction(
+            headerTemplate = "s32 BPF_STRUCT_OPS(sched_exit_task, struct task_struct *p, struct scx_exit_task_args *args)",
+            addDefinition = false
+    )
+    default int exitTask(Ptr<TaskDefinitions.task_struct> p, Ptr<ScxDefinitions.scx_exit_task_args> args) {
+        return 0;
+    }
+
+    @BPFFunction(
             headerTemplate = "s32 BPF_STRUCT_OPS_SLEEPABLE(sched_init)",
             addDefinition = false
     )
@@ -266,6 +276,14 @@ public interface Scheduler {
     )
     default void exit(Ptr<ScxDefinitions.scx_exit_info> ei) {
         return;
+    }
+
+    @BPFFunction(
+            headerTemplate = "bool BPF_STRUCT_OPS(sched_yield, struct task_struct *from, struct task_struct *to)",
+            addDefinition = false
+    )
+    default boolean schedYield(Ptr<TaskDefinitions.task_struct> from, Ptr<TaskDefinitions.task_struct> to) {
+        return false;
     }
 
     @BPFFunction(
