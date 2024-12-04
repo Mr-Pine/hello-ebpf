@@ -1513,7 +1513,7 @@ public class Generator {
                 var builder =
                         MethodSpec.methodBuilder(name).addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                                 .addAnnotation(cts(NotUsableInJava.class))
-                                .addAnnotation(builtinFunctionAnn).returns(returnType.toTypeName(gen)).varargs(variadic);
+                                .addAnnotation(builtinFunctionAnn).returns(returnType == null ? TypeName.VOID : returnType.toTypeName(gen)).varargs(variadic);
                 for (int i = 0; i < parameters.size(); i++) {
                     var param = parameters.get(i);
                     if (param.type.resolve() instanceof VoidType) { // this can never be
