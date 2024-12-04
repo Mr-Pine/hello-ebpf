@@ -1561,7 +1561,7 @@ public class Generator {
                 }).toList();
                 var anyConversion = params.stream().anyMatch(a -> a.contains("(") || a.contains(")"));
                 String call = anyConversion ? name + "(" + String.join(", ", params) + ")" : name;
-                String ret = returnsVoid() || !returnType.shouldAddCast() ? call :
+                String ret = returnsVoid() || returnType == null || !returnType.shouldAddCast() ? call :
                         "((" + returnType.toCType().toPrettyString() + ")" + call + ")";
                 if (ret.equals(name)) {
                     return null;
@@ -1701,6 +1701,7 @@ public class Generator {
                 var parts = cName.split(" ");
                 if (parts.length == 1) {
                     return Declarator.identifier(cName);
+
                 }
                 return switch (parts[1]) {
                     case "struct" -> Declarator.structIdentifier(Expression.variable(parts[1]));
