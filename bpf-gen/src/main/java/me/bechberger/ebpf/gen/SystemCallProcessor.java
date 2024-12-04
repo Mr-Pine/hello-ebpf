@@ -317,7 +317,7 @@ public class SystemCallProcessor {
         // we don't want to deal with arch-specific system calls for now
 
         Type.NamedType runtimeType = null;
-        for (String prefix : List.of("do_sys_", "do_", "__do_sys_")) {
+        for (String prefix : List.of("do_sys_", "do_", "__do_sys_", "ksys_")) {
             runtimeType = runtimeGenerator.getByName(prefix + syscall.name());
             if (runtimeType != null) {
                 break;
